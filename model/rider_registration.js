@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
-const Joi = require('@hapi/joi')
 const schema = mongoose.Schema
 
-const user_register_schema = new schema(
+const rider_register_schema = new schema(
     {
         fname: {
             type: String,
@@ -30,7 +29,7 @@ const user_register_schema = new schema(
             min: 6,
             max: 1024
         },
-        rider_image:
+        user_image:
         {
             data: Buffer,
             contentType: String
@@ -44,4 +43,4 @@ const user_register_schema = new schema(
 
     }
 )
-module.exports =  mongoose.model('user_registeration', user_register_schema)
+module.exports =  mongoose.model('rider_registeration', rider_register_schema)

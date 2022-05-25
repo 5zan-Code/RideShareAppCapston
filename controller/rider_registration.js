@@ -1,17 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const mdb_user_model = require("../model/user_register_model");
+const multer  = require('multer')
+const upload = multer({ dest: './public/uploads' })
+const mdb_user_model = require("../model/rider_registration");
 var fs = require("fs");
 var path = require("path");
-var upload = require("./file_upload");
-const user_register_model = require("../model/user_register_model");
-const userLogin = require("../model/user_login");
+
 
 var response = { id: 0, msg: "", statusCode: 0 };
 
-router.post("/register_user", upload.single("user_image"), async (req, res) => {
-  try {
+router.post("/register_rider", upload.array("rider_image",12), async (req, res) => {
+    try {
+    
+      
     if (
       req.body.email &&
       req.body.fname &&
@@ -32,10 +34,14 @@ router.post("/register_user", upload.single("user_image"), async (req, res) => {
         userData.lname = req.body.lname;
         userData.email = req.body.email;
         userData.password = hashPassword;
-        userData.user_image = {
+        
+        userData.rider_image = {
+            
           data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
           contentType: 'image/png'
+          
       }
+     
 
         let newUser = await userData.save();
 
@@ -56,32 +62,10 @@ router.post("/register_user", upload.single("user_image"), async (req, res) => {
   res.json(response);
 });
 
-router.get("/register_user", async (req, res) => {
-  if (req.session.userId) {
-    mdb_user_model.find(
-      {
-        id: req.session.userId,
-      },
-      (err, items) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send("An error occurred", err);
-        } else {
-          res.send(items);
-        }
-      }
-    );
-  } else {
-    response.msg = req.session.userId;
-    response.statusCode = 201;
-  }
-  res.json(response);
-});
-
 //Login
 var response1 = { id: 0, msg: "", statusCode: 0, fname: "", lname: "", user_image:"", email:"" };
 
-router.post("/login", async (req, res) => {
+router.post("/login_rider", async (req, res) => {
   
 
   try {

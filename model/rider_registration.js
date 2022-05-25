@@ -41,6 +41,11 @@ const rider_register_schema = new schema(
         date: {
             type: Date,
             default: Date.now
+        },
+        maxNumberSeats :{
+            type: Number,
+            isRequired: true,
+            default: 1
         }
 
 

@@ -14,6 +14,11 @@ const user_login_schema = new schema({
     min: 6,
     max: 1024,
   },
+  isVerified: {
+    type: Boolean,
+    isRequired: true,
+    default : false
+  }
 });
 
 

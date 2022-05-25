@@ -1,19 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const multer  = require('multer')
-const upload = multer({ dest: './public/uploads' })
+const multer = require('multer')
+//const upload = multer({ dest: './public/uploads' })
 const mdb_user_model = require("../model/rider_registration");
 var fs = require("fs");
 var path = require("path");
 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    let ext = path.extname(file.originalname)
+    cb(null, file.fieldname + '-' + Date.now() + ext)
+  }
+})
+var upload = multer({ storage: storage })
 
 var response = { id: 0, msg: "", statusCode: 0 };
 
-router.post("/register_rider", upload.array("rider_image",12), async (req, res) => {
-    try {
-    
-      
+router.post("/register_rider", upload.array("rider_image", 12), async (req, res) => {
+
+  try {
+
+
     if (
       req.body.email &&
       req.body.fname &&
@@ -34,22 +45,32 @@ router.post("/register_rider", upload.array("rider_image",12), async (req, res) 
         userData.lname = req.body.lname;
         userData.email = req.body.email;
         userData.password = hashPassword;
-        
-        userData.rider_image = {
-            
-          data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-          contentType: 'image/png'
-          
-      }
-     
 
-        let newUser = await userData.save();
+        const files = req.files;
+        if (!files) {
 
-        response.id = newUser.id;
-        response.msg = "Register Successfully";
-        response.statusCode = 200;
-        req.session.userId = response.id;
-        console.log(newUser);
+          response.statusCode = 404;
+          response.id = 0;
+          response.msg = "Registration failed...!!!";
+
+        } else {
+          files.forEach(element => {
+            userData.rider_image.push({
+              data: Buffer.from(fs.readFileSync(element.path).toString('base64'), 'base64'),
+              contentType: 'image/jpg'
+            })
+          });
+
+          let newUser = await userData.save();
+
+          response.statusCode = 200;
+          response.id = newUser.id;
+          response.msg = "Register Successfully";
+
+          req.session.userId = response.id;
+
+        }
+
       } else {
         response.msg = "User already exists";
       }
@@ -63,10 +84,10 @@ router.post("/register_rider", upload.array("rider_image",12), async (req, res) 
 });
 
 //Login
-var response1 = { id: 0, msg: "", statusCode: 0, fname: "", lname: "", user_image:"", email:"" };
+var response1 = { id: 0, msg: "", statusCode: 0, fname: "", lname: "", user_image: "", email: "" };
 
 router.post("/login_rider", async (req, res) => {
-  
+
 
   try {
     let existingUser = await mdb_user_model.findOne({ email: req.body.email });
@@ -77,9 +98,9 @@ router.post("/login_rider", async (req, res) => {
         response1.statusCode = 200;
         response1.msg = "Login succesful";
         response1.email = existingUser.email,
-        response1.fname = existingUser.fname,
-        response1.lname = existingUser.lname,
-        response1.user_image = existingUser.user_image
+          response1.fname = existingUser.fname,
+          response1.lname = existingUser.lname,
+          response1.user_image = existingUser.user_image
         req.session.userId = response1.id;
       }
       else {

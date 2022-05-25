@@ -11,12 +11,12 @@ const rider_register_schema = new schema(
         },
         lname: {
             type: String,
-            required : true,
+            required: true,
             min: 6,
             max: 255
         },
 
-        email :{
+        email: {
             type: String,
             required: true,
             unique: true,
@@ -29,13 +29,16 @@ const rider_register_schema = new schema(
             min: 6,
             max: 1024
         },
-        user_image:
-        {
-            data: Buffer,
-            contentType: String
-        },
+        rider_image:
+            [
+                {
+                    
+                    data: Buffer,
+                    contentType: String
+                },
+            ],
 
-        date:{
+        date: {
             type: Date,
             default: Date.now
         }
@@ -43,4 +46,4 @@ const rider_register_schema = new schema(
 
     }
 )
-module.exports =  mongoose.model('rider_registeration', rider_register_schema)
+module.exports = mongoose.model('rider_registeration', rider_register_schema)

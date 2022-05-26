@@ -30,7 +30,7 @@ const user_register_schema = new schema(
             min: 6,
             max: 1024
         },
-        rider_image:
+        user_image:
         {
             data: Buffer,
             contentType: String

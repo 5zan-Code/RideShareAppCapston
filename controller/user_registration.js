@@ -33,7 +33,11 @@ router.post("/register_user", upload.single("user_image"), async (req, res) => {
         userData.email = req.body.email;
         userData.password = hashPassword;
         userData.user_image = {
-          data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+          data:  Buffer.from(
+            fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)).toString("base64"),
+            "base64"
+          ),
+       
           contentType: 'image/png'
       }
 
@@ -52,28 +56,6 @@ router.post("/register_user", upload.single("user_image"), async (req, res) => {
     response.msg = err;
     console.log(err);
     response.statusCode = 404;
-  }
-  res.json(response);
-});
-
-router.get("/register_user", async (req, res) => {
-  if (req.session.userId) {
-    mdb_user_model.find(
-      {
-        id: req.session.userId,
-      },
-      (err, items) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send("An error occurred", err);
-        } else {
-          res.send(items);
-        }
-      }
-    );
-  } else {
-    response.msg = req.session.userId;
-    response.statusCode = 201;
   }
   res.json(response);
 });

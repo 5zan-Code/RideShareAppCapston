@@ -3,20 +3,12 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 //const upload = multer({ dest: './public/uploads' })
+var upload = require("./file_upload");
 const mdb_user_model = require("../model/rider_registration");
 var fs = require("fs");
 var path = require("path");
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    let ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + Date.now() + ext);
-  },
-});
-var upload = multer({ storage: storage });
+
 
 var response = { id: 0, msg: "", statusCode: 0 };
 

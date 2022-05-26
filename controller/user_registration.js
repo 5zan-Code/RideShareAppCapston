@@ -11,6 +11,7 @@ const userLogin = require("../model/user_login");
 var response = { id: 0, msg: "", statusCode: 0 };
 
 router.post("/register_user", upload.single("user_image"), async (req, res) => {
+  
   try {
     if (
       req.body.email &&
@@ -33,21 +34,16 @@ router.post("/register_user", upload.single("user_image"), async (req, res) => {
         userData.email = req.body.email;
         userData.password = hashPassword;
         userData.user_image = {
-          data:  Buffer.from(
-            fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)).toString("base64"),
-            "base64"
-          ),
-       
+          data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
           contentType: 'image/png'
-      }
-
+        }
+       
         let newUser = await userData.save();
-
         response.id = newUser.id;
         response.msg = "Register Successfully";
         response.statusCode = 200;
         req.session.userId = response.id;
-        console.log(newUser);
+
       } else {
         response.msg = "User already exists";
       }
@@ -58,7 +54,7 @@ router.post("/register_user", upload.single("user_image"), async (req, res) => {
     response.statusCode = 404;
   }
   res.json(response);
-});
+})
 
 //Login
 var response1 = { id: 0, msg: "", statusCode: 0, fname: "", lname: "", user_image:"", email:"" };

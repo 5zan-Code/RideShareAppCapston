@@ -4,12 +4,13 @@
 var app = require('../app');
 var debug = require('debug')('expressprojectsec1conestoga:server');
 var http = require('http');
+const dotenv = require('dotenv')
 const mongoose = require('mongoose');
 
 
-const dburi = "mongodb+srv://f97aizan:Faizan@1@cluster0.zhj3z.mongodb.net/?retryWrites=true&w=majority"
 
-
+dotenv.config();
+const dburi = process.env.DB_CONNECT
 /**
  * Get port from environment and store in Express.
  */

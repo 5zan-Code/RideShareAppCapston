@@ -5,6 +5,7 @@ var app = require('../app');
 var debug = require('debug')('expressprojectsec1conestoga:server');
 var http = require('http');
 const dotenv = require('dotenv')
+const color = require('colors')
 const mongoose = require('mongoose');
 
 
@@ -15,7 +16,7 @@ const dburi = process.env.DB_CONNECT
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '4000');
+var port = normalizePort(process.env.PORT );
 app.set('port', port);
 
 /**
@@ -32,7 +33,8 @@ mongoose.connect(dburi, { useNewUrlParser: true, useUnifiedTopology: true, useCr
         server.listen(port);
         server.on('error', onError);
         server.on('listening', onListening);
-        console.log("Connected to DB");
+        console.log("-> Connected to DB".yellow);
+        console.log(`-> Listenting from port ${port}`.green)
     })
     .catch((error) => {
         console.log("error : " + error);

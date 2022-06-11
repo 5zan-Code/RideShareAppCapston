@@ -1,0 +1,44 @@
+// Ads API
+
+1- Rider Ad -> Name, Car detail, from Location, To Location, contact number, startTime, startDate
+4- user ad - from Location, to location, startTime, startDate, Address
+2- Ads DELETE -> DELETE BTN - delete Ads
+3- ads UPDATE -> name, car details, location details.
+
+
+// USER - REGiSTRATION API
+->  name, email, password, image, contact number
+
+// Rider Registration API
+-> name, email, password, images[enrollment letter, one card] //pdf
+
+
+// car api
+-> rider_id, car image, car number, car seats,car plate number
+
+// rider's ad -> request I want that rider
+
+// User request api
+-> user_ID,  riderAdID, status -> Accept/Decline/Pending, isCompleted
+
+// Rider request api
+-> user_ID,  riderAdID, status -> Accept/Decline/Pending ,isCompleted
+
+// Rating api for riders
+-> rider_ID, user_ID, date, Comment(optional), rating
+
+// isCompleted api
+-> userRequestID, status
+
+ADMIN api
+//verification api 
+-> riderID, status, isVerified 
+
+//Ad delete 
+-> post[RiderID], post[userID]
+
+// search api
+-> location from, location to, date, riderName 
+
+
+Estimated date -> 30th june
